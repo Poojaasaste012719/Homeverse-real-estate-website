@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HomeVerse — Find Your Dream Home</title>
+  <meta name="description" content="HomeVerse is a modern real estate website template to find, rent, or buy properties with filters, mortgage calculator, agent directory, and more." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0b0d16;
+      --bg-soft:#101425;
+      --elev:#12172a;
+      --card:#151b31;
+      --text:#e6e9f2;
+      --muted:#9aa4c7;
+      --brand:#6c8cff;
+      --brand-2:#60e1cb;
+      --accent:#ffd166;
+      --danger:#ff6b6b;
+      --ok:#4dd17a;
+      --grad: linear-gradient(135deg, #6c8cff 0%, #60e1cb 45%, #ffd166 100%);
+      --glass: rgba(255,255,255,.06);
+      --radius: 18px;
+      --radius-lg: 28px;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --shadow-soft: 0 6px 18px rgba(0,0,0,.18);
+      --maxw: 1200px;
+    }
+    [data-theme="light"]{
+      --bg:#f5f7fb;
+      --bg-soft:#ffffff;
+      --elev:#ffffff;
+      --card:#ffffff;
+      --text:#101223;
+      --muted:#5a607a;
+      --brand:#4052ff;
+      --brand-2:#0fb8b3;
+      --accent:#ffb703;
+      --danger:#e63946;
+      --ok:#2ea44f;
+      --glass: rgba(0,0,0,.05);
+      --shadow: 0 10px 30px rgba(10,10,20,.08);
+      --shadow-soft: 0 6px 18px rgba(10,10,20,.06);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(108,140,255,.15), transparent 60%),
+                  radial-gradient(900px 600px at 10% 0%, rgba(96,225,203,.12), transparent 55%),
+                  var(--bg);
+      line-height:1.65;
+    }
+
+    /* Utilities */
+    .container{max-width:var(--maxw); padding:0 20px; margin:0 auto}
+    .grid{display:grid; gap:24px}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      background:var(--brand); color:white; border:none;
+      padding:12px 18px; border-radius:14px; font-weight:600; cursor:pointer;
+      box-shadow:var(--shadow-soft); text-decoration:none
+    }
+    .btn:hover{filter:brightness(1.05)}
+    .btn.ghost{background:transparent; border:1px solid var(--glass); color:var(--text); backdrop-filter: blur(8px)}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:var(--glass); font-size:12px}
+    .tag{display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; background:rgba(108,140,255,.15); color:#cfd7ff; border:1px solid rgba(108,140,255,.3)}
+    [data-theme="light"] .tag{color:#2a3aff}
+    .badge{padding:6px 10px; border-radius:12px; font-size:12px; background:rgba(255,209,102,.18); color:#ffd166; border:1px solid rgba(255,209,102,.35)}
+    .chips{display:flex; gap:10px; flex-wrap:wrap}
+    .hide{display:none!important}
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--glass)
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; height:72px}
+    .logo{
+      display:flex; align-items:center; gap:12px; font-weight:800;
+      letter-spacing:.2px; text-decoration:none; color:var(--text)
+    }
+    .logo .mark{
+      width:36px; height:36px; border-radius:12px; background:var(--grad); box-shadow:var(--shadow)
+    }
+    .nav-links{display:flex; gap:18px; align-items:center}
+    .nav-links a{color:var(--muted); text-decoration:none; font-weight:600}
+    .nav-links a:hover{color:var(--text)}
+    .theme-toggle{
+      width:44px; height:44px; border-radius:12px; border:1px solid var(--glass); background:transparent; cursor:pointer
+    }
+    .hamburger{display:none}
+
+    /* Hero */
+    .hero{
+      position:relative; padding:68px 0 36px; overflow:hidden
+    }
+    .hero-inner{
+      display:grid; grid-template-columns: 1.1fr .9fr; gap:32px; align-items:center
+    }
+    .eyebrow{font-size:14px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+    h1{
+      font-family: "Playfair Display", serif; font-size: clamp(36px, 5vw, 64px);
+      line-height:1.05; margin:8px 0 10px
+    }
+    .lead{font-size: clamp(16px, 2.2vw, 19px); color:var(--muted)}
+    .hero-card{
+      background:var(--card); border:1px solid var(--glass); border-radius:var(--radius-lg); box-shadow:var(--shadow);
+      padding:20px; position:relative; overflow:hidden
+    }
+    .hero-card:before{
+      content:""; position:absolute; inset:-2px; background:
+      radial-gradient(400px 200px at 10% 0%, rgba(108,140,255,.25), transparent 40%),
+      radial-gradient(400px 200px at 90% 100%, rgba(96,225,203,.22), transparent 40%);
+      z-index:0
+    }
+
+    /* Search */
+    .search{
+      margin-top:18px; background:var(--elev); border:1px solid var(--glass); border-radius:16px;
+      padding:10px; display:flex; gap:10px; flex-wrap:wrap; align-items:center
+    }
+    .tabs{display:flex; gap:6px}
+    .tab{padding:8px 12px; border-radius:10px; border:1px solid var(--glass); background:transparent; color:var(--muted); font-weight:700; cursor:pointer}
+    .tab.active{background:var(--brand); color:white; border-color:transparent}
+    .field{display:flex; flex-direction:column; gap:6px; min-width:150px; flex:1}
+    .field label{font-size:12px; color:var(--muted)}
+    .field input, .field select{
+      padding:12px 12px; border-radius:12px; border:1px solid var(--glass); background:transparent; color:var(--text); outline:none
+    }
+
+    /* Section */
+    section{padding:56px 0}
+    .section-head{display:flex; justify-content:space-between; align-items:end; gap:16px; margin-bottom:20px}
+    .section-head h2{font-family:"Poppins",sans-serif; font-size: clamp(24px, 3.2vw, 36px); margin:0}
+    .section-sub{color:var(--muted); max-width:700px}
+
+    /* Cards */
+    .cards{display:grid; grid-template-columns: repeat(3, 1fr); gap:22px}
+    .card{
+      background:var(--card); border:1px solid var(--glass); border-radius:18px; box-shadow:var(--shadow-soft); overflow:hidden; display:flex; flex-direction:column
+    }
+    .card-media{position:relative; aspect-ratio: 16/10; background:#0f1324}
+    .card-media img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+    .card-badge{position:absolute; left:12px; top:12px; display:flex; gap:8px}
+    .fav{position:absolute; right:12px; top:12px; width:42px; height:42px; border-radius:12px; display:grid; place-items:center; background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.18); cursor:pointer}
+    .card-body{padding:16px 16px 14px; display:flex; flex-direction:column; gap:10px}
+    .price{font-size:20px; font-weight:800}
+    .meta{display:flex; gap:12px; color:var(--muted); font-size:14px}
+    .meta span{display:inline-flex; align-items:center; gap:6px}
+    .card-footer{display:flex; justify-content:space-between; align-items:center; padding:14px 16px 16px; border-top:1px dashed var(--glass)}
+    .btn-small{padding:8px 12px; border-radius:10px; font-weight:700; font-size:14px}
+    .filters{display:flex; gap:10px; flex-wrap:wrap}
+
+    /* Stats */
+    .stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:16px}
+    .stat{background:var(--card); border:1px solid var(--glass); padding:18px; border-radius:16px; text-align:center}
+    .stat .num{font-size:32px; font-weight:900}
+    .stat .lbl{color:var(--muted); font-size:13px}
+
+    /* Gallery */
+    .gallery{display:grid; grid-template-columns: repeat(4, 1fr); gap:10px}
+    .gimg{position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:14px; cursor:pointer; border:1px solid var(--glass)}
+    .gimg img{width:100%; height:100%; object-fit:cover; transition:transform .5s}
+    .gimg:hover img{transform:scale(1.06)}
+
+    /* Lightbox */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.8); display:none; align-items:center; justify-content:center; z-index:100}
+    .lightbox.active{display:flex}
+    .lightbox img{max-width:92vw; max-height:82vh; border-radius:14px; box-shadow:var(--shadow)}
+    .lightbox .close{position:absolute; top:20px; right:20px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); width:48px; height:48px; border-radius:12px; cursor:pointer}
+
+    /* Testimonials */
+    .carousel{position:relative; overflow:hidden; border-radius:18px; background:var(--card); border:1px solid var(--glass)}
+    .slides{display:flex; transition:transform .6s ease}
+    .tcard{min-width:100%; padding:24px}
+    .tquote{font-family:"Playfair Display", serif; font-size:22px}
+    .tmeta{display:flex; align-items:center; gap:12px; margin-top:12px; color:var(--muted)}
+    .dots{position:absolute; bottom:10px; left:0; right:0; display:flex; gap:8px; justify-content:center}
+    .dot{width:9px; height:9px; border-radius:999px; background:rgba(255,255,255,.25); cursor:pointer}
+    .dot.active{background:var(--brand)}
+
+    /* Agents */
+    .agents{display:grid; grid-template-columns: repeat(4, 1fr); gap:18px}
+    .agent{background:var(--card); border:1px solid var(--glass); border-radius:16px; padding:16px; text-align:center}
+    .agent .avatar{width:84px; height:84px; margin:0 auto 8px; border-radius:50%; overflow:hidden; border:2px solid var(--glass)}
+    .agent .avatar img{width:100%; height:100%; object-fit:cover}
+    .agent .role{color:var(--muted); font-size:13px}
+
+    /* Calculator & FAQ */
+    .panel{background:var(--card); border:1px solid var(--glass); border-radius:18px; padding:18px}
+    .calc-grid{display:grid; grid-template-columns: 1fr 1fr; gap:16px}
+    .faq .q{border-bottom:1px dashed var(--glass); padding:14px 0; cursor:pointer}
+    .faq .a{display:none; color:var(--muted)}
+    .faq .q.open + .a{display:block}
+
+    /* Contact */
+    .contact-grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:18px}
+    .contact form{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .contact textarea{grid-column:1/-1; min-height:120px; padding:12px; border-radius:12px; border:1px solid var(--glass); background:transparent; color:var(--text)}
+    .map{background:var(--card); border:1px solid var(--glass); border-radius:16px; overflow:hidden; height:100%}
+
+    /* Footer */
+    footer{margin-top:40px; padding:30px 0; border-top:1px solid var(--glass); color:var(--muted)}
+    .footgrid{display:grid; grid-template-columns: 1.2fr repeat(3, 1fr); gap:20px}
+    .footgrid a{color:var(--muted); text-decoration:none}
+    .newsletter{display:flex; gap:10px}
+    .newsletter input{flex:1; padding:12px; border-radius:12px; border:1px solid var(--glass); background:transparent; color:var(--text)}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .hero-inner{grid-template-columns:1fr}
+      .cards{grid-template-columns: repeat(2, 1fr)}
+      .stats{grid-template-columns: repeat(2, 1fr)}
+      .agents{grid-template-columns: repeat(2, 1fr)}
+      .gallery{grid-template-columns: repeat(3, 1fr)}
+      .calc-grid, .contact-grid{grid-template-columns:1fr}
+      .footgrid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 680px){
+      .nav-links{display:none}
+      .hamburger{display:inline-flex}
+      .cards{grid-template-columns:1fr}
+      .gallery{grid-template-columns: repeat(2, 1fr)}
+      .footgrid{grid-template-columns:1fr}
+      .search{flex-direction:column; align-items:stretch}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SVG icon sprites -->
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-bed" viewBox="0 0 24 24"><path fill="currentColor" d="M4 7a3 3 0 0 1 3-3h5a3 3 0 0 1 3 3v2h3a3 3 0 0 1 3 3v7h-2v-2H3v2H1v-7a3 3 0 0 1 3-3h3V7Z"/></symbol>
+    <symbol id="i-bath" viewBox="0 0 24 24"><path fill="currentColor" d="M7 3a3 3 0 0 0-3 3v6h16v2a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4v-3h2V6a5 5 0 0 1 10 0v3H8V6a1 1 0 0 0-1-1Z"/></symbol>
+    <symbol id="i-area" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v16H4V4Zm2 2v12h12V6H6Z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.7-9.4-8.2C1 10.2 2.7 6.9 6 6.2c2-.4 3.6.5 4.6 1.7c1-1.2 2.6-2.1 4.6-1.7c3.3.7 5 4 3.4 6.6C19.5 16.3 12 21 12 21Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5a2.5 2.5 0 0 1 0 5Z"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a2 2 0 0 1-2 2C10.07 22 2 13.93 2 3a2 2 0 0 1 2-2h3.49a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2Z"/></symbol>
+  </svg>
+
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#top">
+        <span class="mark"></span>
+        <span>HomeVerse</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#listings">Listings</a>
+        <a href="#neighborhoods">Neighborhoods</a>
+        <a href="#agents">Agents</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#contact">Contact</a>
+        <button id="themeBtn" class="theme-toggle" aria-label="Toggle theme">🌓</button>
+        <a class="btn" href="#contact">Get Consultation</a>
+      </nav>
+      <button class="hamburger theme-toggle" aria-label="Open menu" id="openMenu">☰</button>
+    </div>
+  </header>
+
+  <!-- Mobile sheet -->
+  <div id="mobileSheet" class="panel" style="position:fixed; inset:auto 0 0 0; transform:translateY(110%); transition:transform .35s; z-index:60; border-top-left-radius:18px; border-top-right-radius:18px;">
+    <div class="container" style="padding-top:12px">
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <strong>Menu</strong>
+        <button id="closeMenu" class="theme-toggle" aria-label="Close menu">✕</button>
+      </div>
+      <div class="grid" style="margin-top:10px">
+        <a href="#listings" class="btn ghost">Listings</a>
+        <a href="#neighborhoods" class="btn ghost">Neighborhoods</a>
+        <a href="#agents" class="btn ghost">Agents</a>
+        <a href="#calculator" class="btn ghost">Calculator</a>
+        <a href="#contact" class="btn">Get Consultation</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="container hero-inner">
+        <div>
+          <div class="eyebrow">Find . Buy . Rent</div>
+          <h1>Discover homes that <span style="background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent">fit your life</span>.</h1>
+          <p class="lead">Explore curated listings across India’s most loved neighborhoods. Smart filters, instant tours, and expert agents—everything you need in one place.</p>
+
+          <div class="hero-card" style="margin-top:18px">
+            <div class="search" role="search">
+              <div class="tabs" role="tablist" aria-label="Modes">
+                <button class="tab active" data-mode="buy" aria-selected="true">Buy</button>
+                <button class="tab" data-mode="rent">Rent</button>
+              </div>
+
+              <div class="field">
+                <label for="q">Location / Project</label>
+                <input id="q" type="text" placeholder="e.g., Wakad, Koregaon Park, HSR Layout">
+              </div>
+              <div class="field">
+                <label for="type">Type</label>
+                <select id="type">
+                  <option value="">Any</option>
+                  <option>Apartment</option>
+                  <option>Villa</option>
+                  <option>Studio</option>
+                  <option>Penthouse</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="budget">Budget</label>
+                <select id="budget">
+                  <option value="">Any</option>
+                  <option value="50">Under ₹50L</option>
+                  <option value="100">Under ₹1Cr</option>
+                  <option value="200">₹1–2Cr</option>
+                  <option value="201">Above ₹2Cr</option>
+                </select>
+              </div>
+              <a class="btn" id="searchBtn" href="#listings">Search Homes 🔍</a>
+            </div>
+
+            <div class="chips" style="margin-top:12px">
+              <span class="pill">⏱ 5-min mortgage pre-check</span>
+              <span class="pill">🛡 Verified listings</span>
+              <span class="pill">🤝 No hidden fees</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <img alt="Cityscape" style="width:100%; border-radius:14px"
+               src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='900' height='520'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%236c8cff' offset='0'/><stop stop-color='%2360e1cb' offset='0.5'/><stop stop-color='%23ffd166' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%2310152a'/><g fill='url(%23g)' opacity='.85'><rect x='70' y='260' width='80' height='200' rx='8'/><rect x='170' y='220' width='120' height='240' rx='10'/><rect x='310' y='180' width='100' height='280' rx='10'/><rect x='430' y='140' width='140' height='320' rx='12'/><rect x='590' y='210' width='110' height='250' rx='10'/><rect x='720' y='260' width='80' height='200' rx='8'/></g><text x='50%' y='80' text-anchor='middle' fill='white' font-size='40' font-family='Poppins'>Welcome to HomeVerse</text><text x='50%' y='120' text-anchor='middle' fill='%23cfd7ff' font-size='20' font-family='Inter'>Smart search • Expert agents • Better prices</text></svg>">
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px; margin-top:12px">
+            <div class="panel">
+              <div class="eyebrow">Hot Area</div>
+              <strong>Wakad • Pune</strong>
+              <div class="chips" style="margin-top:8px">
+                <span class="tag">Near IT Parks</span><span class="tag">Green</span><span class="tag">Metro Access</span>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="eyebrow">Avg. Price</div>
+              <strong>₹7,800 / sq.ft</strong>
+              <div style="height:6px; background:var(--glass); border-radius:999px; overflow:hidden; margin-top:8px">
+                <div style="height:6px; width:72%; background:var(--grad)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section>
+      <div class="container stats" id="stats">
+        <div class="stat"><div class="num" data-count="3200">0</div><div class="lbl">Active Listings</div></div>
+        <div class="stat"><div class="num" data-count="940">0</div><div class="lbl">Happy Families</div></div>
+        <div class="stat"><div class="num" data-count="180">0</div><div class="lbl">Expert Agents</div></div>
+        <div class="stat"><div class="num" data-count="48">0</div><div class="lbl">Cities Covered</div></div>
+      </div>
+    </section>
+
+    <!-- LISTINGS -->
+    <section id="listings">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Featured Homes</h2>
+            <p class="section-sub">Handpicked properties with verified documents, virtual tours, and transparent pricing.</p>
+          </div>
+          <div class="filters">
+            <button class="btn-small btn ghost" data-filter="All">All</button>
+            <button class="btn-small btn ghost" data-filter="Apartment">Apartment</button>
+            <button class="btn-small btn ghost" data-filter="Villa">Villa</button>
+            <button class="btn-small btn ghost" data-filter="Studio">Studio</button>
+            <button class="btn-small btn ghost" data-filter="Penthouse">Penthouse</button>
+          </div>
+        </div>
+
+        <div class="cards" id="cards">
+          <!-- Cards injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- NEIGHBORHOODS -->
+    <section id="neighborhoods">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Neighborhoods to Love</h2>
+            <p class="section-sub">Live near parks, cafés, schools, and transit. Explore community vibes before you move.</p>
+          </div>
+          <a class="btn ghost" href="#gallery">View Gallery →</a>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-media">
+              <img alt="Koregaon Park" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%230fb8b3' offset='0'/><stop stop-color='%236c8cff' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%2313182d'/><circle cx='120' cy='220' r='90' fill='url(%23g)' opacity='.7'/><circle cx='420' cy='180' r='130' fill='url(%23g)' opacity='.5'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Poppins' font-size='28' fill='%23ffffff'>Koregaon Park • Pune</text></svg>">
+            </div>
+            <div class="card-body">
+              <div class="price">Koregaon Park</div>
+              <div class="meta"><span>Leafy streets • Cafés • Nightlife</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-media">
+              <img alt="HSR Layout" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='400'><defs><linearGradient id='g2' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%23ffd166' offset='0'/><stop stop-color='%2360e1cb' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%2313182d'/><rect x='80' y='80' width='200' height='240' rx='20' fill='url(%23g2)' opacity='.7'/><rect x='360' y='120' width='280' height='200' rx='22' fill='url(%23g2)' opacity='.5'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Poppins' font-size='28' fill='%23ffffff'>HSR Layout • Bengaluru</text></svg>">
+            </div>
+            <div class="card-body">
+              <div class="price">HSR Layout</div>
+              <div class="meta"><span>Startups • Parks • Food hubs</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-media">
+              <img alt="Gurugram" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='400'><defs><linearGradient id='g3' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%236c8cff' offset='0'/><stop stop-color='%23ffd166' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%2313182d'/><g fill='url(%23g3)' opacity='.75'><polygon points='0,300 140,160 280,300'/><polygon points='200,300 320,120 440,300'/><polygon points='380,300 520,150 660,300'/></g><text x='50%' y='55%' text-anchor='middle' font-family='Poppins' font-size='28' fill='white'>DLF • Gurugram</text></svg>">
+            </div>
+            <div class="card-body">
+              <div class="price">DLF, Gurugram</div>
+              <div class="meta"><span>Luxury • Malls • Corporate</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Gallery & Interiors</h2>
+            <p class="section-sub">Get a feel for layouts, finishes, and natural light before you visit.</p>
+          </div>
+        </div>
+        <div class="gallery" id="galleryGrid">
+          <!-- 8 square images -->
+        </div>
+      </div>
+      <div class="lightbox" id="lightbox" aria-modal="true" role="dialog">
+        <img alt="" id="lightboxImg">
+        <button class="close" id="lightboxClose">✕</button>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>What buyers say</h2>
+            <p class="section-sub">We value trust and clarity. Here’s what our clients experienced.</p>
+          </div>
+        </div>
+        <div class="carousel" id="carousel">
+          <div class="slides" id="slides">
+            <div class="tcard">
+              <div class="tquote">“HomeVerse helped us close in 12 days with zero surprises. Loved the virtual tour!”</div>
+              <div class="tmeta"><span class="pill">Pune</span><span>— Aarti & Kunal</span></div>
+            </div>
+            <div class="tcard">
+              <div class="tquote">“Clear documentation and honest pricing. Our agent was incredible.”</div>
+              <div class="tmeta"><span class="pill">Bengaluru</span><span>— Priyanka D.</span></div>
+            </div>
+            <div class="tcard">
+              <div class="tquote">“The mortgage pre-check saved us time. Highly recommend.”</div>
+              <div class="tmeta"><span class="pill">Gurugram</span><span>— Sameer S.</span></div>
+            </div>
+          </div>
+          <div class="dots" id="dots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENTS -->
+    <section id="agents">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Meet top agents</h2>
+            <p class="section-sub">Local experts with data-driven insights and negotiation superpowers.</p>
+          </div>
+        </div>
+
+        <div class="agents" id="agentGrid">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR + FAQ -->
+    <section id="calculator">
+      <div class="container calc-grid">
+        <div class="panel">
+          <h2 style="margin-top:0">Mortgage Calculator</h2>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px">
+            <div class="field">
+              <label>Home Price (₹)</label>
+              <input id="c-price" type="number" value="8500000" min="0">
+            </div>
+            <div class="field">
+              <label>Down Payment (₹)</label>
+              <input id="c-down" type="number" value="1500000" min="0">
+            </div>
+            <div class="field">
+              <label>Interest Rate (%)</label>
+              <input id="c-rate" type="number" step="0.01" value="8.25" min="0">
+            </div>
+            <div class="field">
+              <label>Loan Term (years)</label>
+              <input id="c-years" type="number" value="20" min="1">
+            </div>
+          </div>
+          <div class="panel" style="margin-top:12px">
+            <div class="chips">
+              <span class="badge">Monthly EMI</span>
+              <strong id="c-emi" style="font-size:22px">—</strong>
+              <span class="badge">Total Interest</span>
+              <strong id="c-int">—</strong>
+            </div>
+            <div style="margin-top:10px; height:8px; background:var(--glass); border-radius:999px; overflow:hidden">
+              <div id="c-bar" style="height:8px; width:0%; background:var(--grad)"></div>
+            </div>
+            <button class="btn" id="c-run" style="margin-top:12px">Recalculate</button>
+          </div>
+        </div>
+
+        <div class="panel faq">
+          <h2 style="margin-top:0">FAQ</h2>
+          <div class="q">How do I schedule a visit?</div>
+          <div class="a">Use the “Request Visit” button on any listing and choose a slot. We’ll confirm by SMS & email.</div>
+          <div class="q">Are the prices negotiable?</div>
+          <div class="a">Yes. Our agents negotiate based on market comps, builder offers, and inspection results.</div>
+          <div class="q">Do you help with home loans?</div>
+          <div class="a">Absolutely. Get a 5-minute pre-check and best-rate quotes from 6+ partner banks.</div>
+          <div class="q">What about legal verification?</div>
+          <div class="a">We verify title deeds, encumbrance certificates, and RERA approvals before a listing goes live.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+      <div class="container contact-grid">
+        <div class="panel">
+          <h2 style="margin-top:0">Get in touch</h2>
+          <p class="section-sub">Tell us what you’re looking for and we’ll match you with the right agent.</p>
+          <form id="contactForm" novalidate>
+            <div class="field">
+              <label for="name">Full Name</label>
+              <input id="name" required placeholder="Your name">
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" required placeholder="+91 9xxxxxxxxx">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@example.com">
+            </div>
+            <div class="field">
+              <label for="city">Preferred City</label>
+              <select id="city">
+                <option>Pune</option><option>Mumbai</option><option>Bengaluru</option><option>Hyderabad</option><option>Gurugram</option>
+              </select>
+            </div>
+            <textarea id="msg" placeholder="Describe your dream home (beds, budget, amenities)..."></textarea>
+            <div style="display:flex; gap:10px; align-items:center">
+              <button class="btn" type="submit">Request Callback</button>
+              <span id="formStatus" class="pill">We reply in ~1 hour</span>
+            </div>
+          </form>
+        </div>
+
+        <div class="map">
+          <img alt="Map placeholder" style="width:100%; height:100%; object-fit:cover"
+               src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><defs><linearGradient id='gm' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%2360e1cb' offset='0'/><stop stop-color='%236c8cff' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%23111622'/><g stroke='%23ffffff' stroke-opacity='.15'><path d='M0 120h800M0 240h800M0 360h800M0 480h800M160 0v600M320 0v600M480 0v600M640 0v600'/></g><circle cx='420' cy='260' r='10' fill='url(%23gm)'/><text x='440' y='266' fill='%23fff' font-family='Inter' font-size='14'>HomeVerse HQ</text></svg>">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footgrid">
+      <div>
+        <a class="logo" href="#top"><span class="mark"></span><span>HomeVerse</span></a>
+        <p style="margin-top:10px">A better way to discover, tour, and buy your next home—transparent, data-driven, and delightful.</p>
+        <div class="newsletter" style="margin-top:10px">
+          <input id="news" placeholder="Enter your email to get updates">
+          <button class="btn" id="newsBtn">Subscribe</button>
+        </div>
+      </div>
+      <div>
+        <strong>Company</strong><br>
+        <a href="#top">About</a><br><a href="#agents">Careers</a><br><a href="#contact">Contact</a>
+      </div>
+      <div>
+        <strong>Explore</strong><br>
+        <a href="#listings">Buy</a><br><a href="#listings">Rent</a><br><a href="#neighborhoods">Neighborhoods</a>
+      </div>
+      <div>
+        <strong>Legal</strong><br>
+        <a href="#">Terms</a><br><a href="#">Privacy</a><br><a href="#">Cookies</a>
+      </div>
+    </div>
+    <div class="container" style="margin-top:16px; display:flex; justify-content:space-between; gap:12px">
+      <small>© <span id="year"></span> HomeVerse, Inc. All rights reserved.</small>
+      <small>Made with ❤ and clean code.</small>
+    </div>
+  </footer>
+
+  <script>
+    // Theme toggle with persistence
+    (function(){
+      const root = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      const saved = localStorage.getItem('theme');
+      if(saved) root.setAttribute('data-theme', saved);
+      btn.addEventListener('click', ()=>{
+        const cur = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', cur);
+        localStorage.setItem('theme', cur);
+      });
+      // default theme
+      if(!saved){ root.setAttribute('data-theme', 'dark'); }
+    })();
+
+    // Mobile menu
+    (function(){
+      const open = document.getElementById('openMenu');
+      const close = document.getElementById('closeMenu');
+      const sheet = document.getElementById('mobileSheet');
+      const links = sheet.querySelectorAll('a');
+      function set(opening){ sheet.style.transform = opening ? 'translateY(0%)' : 'translateY(110%)'; }
+      open.addEventListener('click', ()=>set(true));
+      close.addEventListener('click', ()=>set(false));
+      links.forEach(a=>a.addEventListener('click', ()=>set(false)));
+    })();
+
+    // Hero tabs (Buy / Rent)
+    (function(){
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t=>{
+        t.addEventListener('click', ()=>{
+          tabs.forEach(x=>x.classList.remove('active'));
+          t.classList.add('active');
+        });
+      });
+    })();
+
+    // Fake data for cards with embedded SVG preview
+    const propData = [
+      { id:1, type:'Apartment', city:'Pune', area:'Wakad', price:9800000, beds:3, baths:3, sqft:1420, status:'Hot', img: gradImg('#6c8cff','#60e1cb','Wakad • 3 BHK') },
+      { id:2, type:'Villa', city:'Gurugram', area:'DLF Phase 5', price:32500000, beds:4, baths:5, sqft:3200, status:'New', img: gradImg('#ffd166','#6c8cff','DLF • Villa') },
+      { id:3, type:'Studio', city:'Mumbai', area:'Powai', price:6500000, beds:1, baths:1, sqft:520, status:'Best Deal', img: gradImg('#60e1cb','#ffd166','Powai • Studio') },
+      { id:4, type:'Penthouse', city:'Bengaluru', area:'Marathahalli', price:21000000, beds:4, baths:4, sqft:2400, status:'Luxury', img: gradImg('#9b87ff','#60e1cb','Penthouse • BLR') },
+      { id:5, type:'Apartment', city:'Hyderabad', area:'Gachibowli', price:12000000, beds:3, baths:3, sqft:1560, status:'Open House', img: gradImg('#6c8cff','#ffd166','Gachibowli • 3 BHK') },
+      { id:6, type:'Villa', city:'Goa', area:'Assagao', price:28500000, beds:4, baths:4, sqft:3000, status:'Sea View', img: gradImg('#60e1cb','#6c8cff','Goa • Villa') },
+    ];
+
+    function gradImg(c1, c2, label){
+      const svg = encodeURIComponent(<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='${c1}' offset='0'/><stop stop-color='${c2}' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%23111522'/><g><circle cx='200' cy='200' r='160' fill='url(%23g)' opacity='.6'/><rect x='420' y='160' width='520' height='360' rx='26' fill='url(%23g)' opacity='.5'/></g><text x='50%' y='84%' text-anchor='middle' font-family='Poppins' font-size='42' fill='%23ffffff'>${label}</text></svg>);
+      return data:image/svg+xml;utf8,${svg};
+    }
+
+    // Render property cards
+    (function(){
+      const cards = document.getElementById('cards');
+      function oneCard(p){
+        return `
+          <article class="card" data-type="${p.type}">
+            <div class="card-media">
+              <img alt="${p.city} ${p.type}" src="${p.img}">
+              <div class="card-badge">
+                <span class="badge">${p.status}</span>
+                <span class="tag">${p.type}</span>
+              </div>
+              <button class="fav" aria-label="Save"><svg width="22" height="22"><use href="#i-heart"/></svg></button>
+            </div>
+            <div class="card-body">
+              <div class="price">₹${formatINR(p.price)}</div>
+              <div style="font-weight:700">${p.area}, ${p.city}</div>
+              <div class="meta">
+                <span><svg width="18" height="18"><use href="#i-bed"/></svg>${p.beds} Beds</span>
+                <span><svg width="18" height="18"><use href="#i-bath"/></svg>${p.baths} Baths</span>
+                <span><svg width="18" height="18"><use href="#i-area"/></svg>${p.sqft} sq.ft</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="pill"><svg width="16" height="16"><use href="#i-pin"/></svg>Verified</span>
+              <div style="display:flex; gap:8px">
+                <button class="btn btn-small">Request Visit</button>
+                <button class="btn btn-small ghost">Details</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+      cards.innerHTML = propData.map(oneCard).join('');
+
+      // Filters
+      document.querySelectorAll('.filters .btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const f = btn.dataset.filter;
+          document.querySelectorAll('#cards .card').forEach(c=>{
+            c.style.display = (f==='All' || c.dataset.type===f) ? 'flex' : 'none';
+          });
+          document.querySelectorAll('.filters .btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    })();
+
+    // Stats counter
+    (function(){
+      const nums = document.querySelectorAll('.num[data-count]');
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            const el = e.target, target = +el.dataset.count;
+            let cur = 0; const step = Math.ceil(target/60);
+            const tick = ()=>{ cur += step; if(cur > target) cur = target; el.textContent = cur.toLocaleString('en-IN'); if(cur < target) requestAnimationFrame(tick); };
+            requestAnimationFrame(tick);
+            io.unobserve(el);
+          }
+        });
+      }, {threshold:.5});
+      nums.forEach(n=>io.observe(n));
+    })();
+
+    // Gallery images
+    (function(){
+      const g = document.getElementById('galleryGrid');
+      function tile(i){
+        const svg = encodeURIComponent(<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop stop-color='%236c8cff' offset='0'/><stop stop-color='%2360e1cb' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%23111622'/><g opacity='.8'><circle cx='140' cy='140' r='110' fill='url(%23g)'/><rect x='220' y='260' width='280' height='220' rx='20' fill='url(%23g)'/></g><text x='50%' y='92%' text-anchor='middle' font-family='Poppins' font-size='28' fill='%23fff'>Interior ${i}</text></svg>);
+        return <div class="gimg"><img alt="Interior ${i}" src="data:image/svg+xml;utf8,${svg}"></div>;
+      }
+      g.innerHTML = Array.from({length:8}, (_,i)=>tile(i+1)).join('');
+
+      // Lightbox
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightboxImg');
+      const close = document.getElementById('lightboxClose');
+      g.querySelectorAll('.gimg img').forEach(im=>{
+        im.addEventListener('click', ()=>{ img.src = im.src; lb.classList.add('active'); });
+      });
+      close.addEventListener('click', ()=>lb.classList.remove('active'));
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.classList.remove('active'); });
+    })();
+
+    // Testimonials carousel
+    (function(){
+      const slides = document.getElementById('slides');
+      const dots = document.getElementById('dots');
+      const total = slides.children.length;
+      let idx = 0, timer;
+
+      function renderDots(){
+        dots.innerHTML = '';
+        for(let i=0;i<total;i++){
+          const d = document.createElement('div');
+          d.className = 'dot' + (i===idx ? ' active':'');
+          d.addEventListener('click', ()=>go(i));
+          dots.appendChild(d);
+        }
+      }
+      function go(n){
+        idx = (n+total)%total;
+        slides.style.transform = translateX(-${idx*100}%);
+        renderDots(); reset();
+      }
+      function reset(){
+        clearInterval(timer);
+        timer = setInterval(()=>go(idx+1), 4000);
+      }
+      renderDots(); reset();
+    })();
+
+    // Agents
+    (function(){
+      const agents = [
+        {name:'Neha Kulkarni', role:'Senior Agent • Pune', phone:'+91 98765 43210'},
+        {name:'Arjun Mehta', role:'Luxury Specialist • Gurugram', phone:'+91 99876 54321'},
+        {name:'Sara Thomas', role:'Rentals • Bengaluru', phone:'+91 90909 10101'},
+        {name:'Rahul Verma', role:'NRI Desk • Mumbai', phone:'+91 90000 22222'},
+      ];
+      const grid = document.getElementById('agentGrid');
+      function avatar(name, i){
+        const hue = (i*80)%360;
+        const svg = encodeURIComponent(<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><defs><linearGradient id='gg' x1='0' y1='0' x2='1' y2='1'><stop stop-color='hsl(${hue},80%,60%)' offset='0'/><stop stop-color='hsl(${(hue+60)%360},80%,60%)' offset='1'/></linearGradient></defs><rect width='100%' height='100%' fill='%2313182d'/><circle cx='100' cy='90' r='42' fill='url(%23gg)'/><rect x='50' y='140' width='100' height='40' rx='20' fill='url(%23gg)'/></svg>);
+        return data:image/svg+xml;utf8,${svg};
+      }
+      grid.innerHTML = agents.map((a,i)=>`
+        <div class="agent">
+          <div class="avatar"><img alt="${a.name}" src="${avatar(a.name,i)}"></div>
+          <div style="font-weight:800">${a.name}</div>
+          <div class="role">${a.role}</div>
+          <div class="chips" style="margin-top:8px; justify-content:center">
+            <span class="tag">Top Rated</span><span class="tag">5 yrs+</span>
+          </div>
+          <a class="btn btn-small" href="tel:${a.phone.replaceAll(' ','')}"><svg width="16" height="16"><use href="#i-phone"/></svg> Call</a>
+        </div>
+      `).join('');
+    })();
+
+    // Mortgage calculator logic
+    function calc(){
+      const price = +document.getElementById('c-price').value || 0;
+      const down  = +document.getElementById('c-down').value || 0;
+      const rateA = +document.getElementById('c-rate').value || 0;
+      const years = +document.getElementById('c-years').value || 1;
+      const loan = Math.max(price - down, 0);
+      const r = (rateA/100)/12;
+      const n = years*12;
+      const emi = r===0 ? loan/n : loan * r * Math.pow(1+r, n) / (Math.pow(1+r, n)-1);
+      const totalPay = emi*n;
+      const totalInt = totalPay - loan;
+      document.getElementById('c-emi').textContent = '₹' + formatINR(Math.round(emi));
+      document.getElementById('c-int').textContent = '₹' + formatINR(Math.round(totalInt));
+      const util = Math.min((loan/(price||1))*100, 100);
+      document.getElementById('c-bar').style.width = util.toFixed(0) + '%';
+    }
+    document.getElementById('c-run').addEventListener('click', calc);
+    ['c-price','c-down','c-rate','c-years'].forEach(id=>document.getElementById(id).addEventListener('input', calc));
+    calc();
+
+    // FAQ accordion
+    (function(){
+      document.querySelectorAll('.faq .q').forEach(q=>{
+        q.addEventListener('click', ()=>{ q.classList.toggle('open'); });
+      });
+    })();
+
+    // Contact form fake validation
+    (function(){
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('formStatus');
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        if(!name || !phone){
+          status.textContent = 'Please enter name and phone.';
+          status.style.background = 'rgba(255,107,107,.2)';
+          status.style.color = '#ffb3b3';
+          return;
+        }
+        status.textContent = 'Thanks! We will call you shortly.';
+        status.style.background = 'rgba(77,209,122,.2)';
+        status.style.color = '#c8f5da';
+        form.reset();
+      });
+    })();
+
+    // Newsletter
+    (function(){
+      const btn = document.getElementById('newsBtn');
+      const input = document.getElementById('news');
+      btn.addEventListener('click', ()=>{
+        if(!input.value.includes('@')) return alert('Enter a valid email.');
+        btn.textContent = 'Subscribed ✔';
+        btn.disabled = true;
+      });
+    })();
+
+    // Search button scroll behavior (simple filter by type & budget)
+    (function(){
+      const btn = document.getElementById('searchBtn');
+      btn.addEventListener('click', ()=>{
+        const type = document.getElementById('type').value;
+        const budget = document.getElementById('budget').value;
+        const q = document.getElementById('q').value.toLowerCase();
+        document.querySelectorAll('#cards .card').forEach(card=>{
+          const t = card.dataset.type;
+          const meta = card.querySelector('.card-body').innerText.toLowerCase();
+          const price = +card.querySelector('.price').innerText.replace(/[^\d]/g,'');
+          let ok = true;
+          if(type && t!==type) ok = false;
+          if(budget){
+            if(budget==='50' && price>=5000000) ok = false;
+            if(budget==='100' && price>=10000000) ok = false;
+            if(budget==='200' && (price<10000000 || price>20000000)) ok = false;
+            if(budget==='201' && price<=20000000) ok = false;
+          }
+          if(q && !meta.includes(q)) ok = false;
+          card.style.display = ok ? 'flex' : 'none';
+        });
+      });
+    })();
+
+    // Utilities
+    function formatINR(n){
+      return n.toLocaleString('en-IN');
+    }
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
